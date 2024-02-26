@@ -685,8 +685,8 @@ selection to the "func" <code>identifier</code>.</p>
 <tr><td><code>End</code></td><td>Move to the end of the line</td><td><code>goto_line_end</code></td></tr>
 <tr><td><code>Ctrl-b</code>, <code>PageUp</code></td><td>Move page up</td><td><code>page_up</code></td></tr>
 <tr><td><code>Ctrl-f</code>, <code>PageDown</code></td><td>Move page down</td><td><code>page_down</code></td></tr>
-<tr><td><code>Ctrl-u</code></td><td>Move half page up</td><td><code>half_page_up</code></td></tr>
-<tr><td><code>Ctrl-d</code></td><td>Move half page down</td><td><code>half_page_down</code></td></tr>
+<tr><td><code>Ctrl-u</code></td><td>Move cursor and page half page up</td><td><code>page_cursor_half_up</code></td></tr>
+<tr><td><code>Ctrl-d</code></td><td>Move cursor and page half page down</td><td><code>page_cursor_half_down</code></td></tr>
 <tr><td><code>Ctrl-i</code></td><td>Jump forward on the jumplist</td><td><code>jump_forward</code></td></tr>
 <tr><td><code>Ctrl-o</code></td><td>Jump backward on the jumplist</td><td><code>jump_backward</code></td></tr>
 <tr><td><code>Ctrl-s</code></td><td>Save the current selection to the jumplist</td><td><code>save_selection</code></td></tr>
@@ -811,8 +811,8 @@ useful when you're simply looking over text and not actively editing it.</p>
 <tr><td><code>k</code>, <code>up</code></td><td>Scroll the view upwards</td><td><code>scroll_up</code></td></tr>
 <tr><td><code>Ctrl-f</code>, <code>PageDown</code></td><td>Move page down</td><td><code>page_down</code></td></tr>
 <tr><td><code>Ctrl-b</code>, <code>PageUp</code></td><td>Move page up</td><td><code>page_up</code></td></tr>
-<tr><td><code>Ctrl-d</code></td><td>Move half page down</td><td><code>half_page_down</code></td></tr>
-<tr><td><code>Ctrl-u</code></td><td>Move half page up</td><td><code>half_page_up</code></td></tr>
+<tr><td><code>Ctrl-u</code></td><td>Move cursor and page half page up</td><td><code>page_cursor_half_up</code></td></tr>
+<tr><td><code>Ctrl-d</code></td><td>Move cursor and page half page down</td><td><code>page_cursor_half_down</code></td></tr>
 </tbody></table>
 </div>
 <h4 id="goto-mode"><a class="header" href="#goto-mode">Goto mode</a></h4>
@@ -1170,6 +1170,7 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>devicetree</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>dhall</td><td>✓</td><td>✓</td><td></td><td><code>dhall-lsp-server</code></td></tr>
 <tr><td>diff</td><td>✓</td><td></td><td></td><td></td></tr>
+<tr><td>docker-compose</td><td>✓</td><td></td><td>✓</td><td><code>docker-compose-langserver</code></td></tr>
 <tr><td>dockerfile</td><td>✓</td><td></td><td></td><td><code>docker-langserver</code></td></tr>
 <tr><td>dot</td><td>✓</td><td></td><td></td><td><code>dot-language-server</code></td></tr>
 <tr><td>dtd</td><td>✓</td><td></td><td></td><td></td></tr>
@@ -1204,10 +1205,11 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>gotmpl</td><td>✓</td><td></td><td></td><td><code>gopls</code></td></tr>
 <tr><td>gowork</td><td>✓</td><td></td><td></td><td><code>gopls</code></td></tr>
 <tr><td>graphql</td><td>✓</td><td></td><td></td><td><code>graphql-lsp</code></td></tr>
+<tr><td>groovy</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>hare</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>haskell</td><td>✓</td><td>✓</td><td></td><td><code>haskell-language-server-wrapper</code></td></tr>
 <tr><td>haskell-persistent</td><td>✓</td><td></td><td></td><td></td></tr>
-<tr><td>hcl</td><td>✓</td><td></td><td>✓</td><td><code>terraform-ls</code></td></tr>
+<tr><td>hcl</td><td>✓</td><td>✓</td><td>✓</td><td><code>terraform-ls</code></td></tr>
 <tr><td>heex</td><td>✓</td><td>✓</td><td></td><td><code>elixir-ls</code></td></tr>
 <tr><td>hocon</td><td>✓</td><td></td><td>✓</td><td></td></tr>
 <tr><td>hoon</td><td>✓</td><td></td><td></td><td></td></tr>
@@ -1251,7 +1253,7 @@ Languages</a> guide for more language configuration information.</p>
 <tr><td>nasm</td><td>✓</td><td>✓</td><td></td><td></td></tr>
 <tr><td>nickel</td><td>✓</td><td></td><td>✓</td><td><code>nls</code></td></tr>
 <tr><td>nim</td><td>✓</td><td>✓</td><td>✓</td><td><code>nimlangserver</code></td></tr>
-<tr><td>nix</td><td>✓</td><td></td><td></td><td><code>nil</code></td></tr>
+<tr><td>nix</td><td>✓</td><td>✓</td><td></td><td><code>nil</code></td></tr>
 <tr><td>nu</td><td>✓</td><td></td><td></td><td><code>nu</code></td></tr>
 <tr><td>nunjucks</td><td>✓</td><td></td><td></td><td></td></tr>
 <tr><td>ocaml</td><td>✓</td><td></td><td>✓</td><td><code>ocamllsp</code></td></tr>
