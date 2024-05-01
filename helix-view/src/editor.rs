@@ -347,6 +347,10 @@ pub struct Config {
     /// Display diagnostic below the line they occur.
     pub inline_diagnostics: InlineDiagnosticsConfig,
     pub end_of_line_diagnostics: DiagnosticFilter,
+    pub persist_old_files: bool,
+    pub persist_commands: bool,
+    pub persist_search: bool,
+    pub persist_clipboard: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize, Eq, PartialOrd, Ord)]
@@ -981,6 +985,10 @@ impl Default for Config {
             jump_label_alphabet: ('a'..='z').collect(),
             inline_diagnostics: InlineDiagnosticsConfig::default(),
             end_of_line_diagnostics: DiagnosticFilter::Disable,
+            persist_old_files: false,
+            persist_commands: false,
+            persist_search: false,
+            persist_clipboard: false,
         }
     }
 }
@@ -1777,10 +1785,12 @@ impl Editor {
             doc.remove_view(id);
         }
 
-        for loc in file_locs {
-            persistence::push_file_history(&loc);
-            self.old_file_locs
-                .insert(loc.path, (loc.view_position, loc.selection));
+        if self.config().persist_old_files {
+            for loc in file_locs {
+                persistence::push_file_history(&loc);
+                self.old_file_locs
+                    .insert(loc.path, (loc.view_position, loc.selection));
+            }
         }
 
         self.tree.remove(id);
@@ -1840,10 +1850,12 @@ impl Editor {
             })
             .collect();
 
-        for loc in file_locs {
-            persistence::push_file_history(&loc);
-            self.old_file_locs
-                .insert(loc.path, (loc.view_position, loc.selection));
+        if self.config().persist_old_files {
+            for loc in file_locs {
+                persistence::push_file_history(&loc);
+                self.old_file_locs
+                    .insert(loc.path, (loc.view_position, loc.selection));
+            }
         }
 
         for action in actions {
