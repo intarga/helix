@@ -164,26 +164,23 @@ impl Application {
             old_file_locs,
         );
 
-        // TODO: do most of this in the background?
+        // Should we be doing these in background tasks?
         if persistence_config.commands {
             editor
                 .registers
                 .write(':', persistence::read_command_history())
-                // TODO: do something about this unwrap
                 .unwrap();
         }
         if persistence_config.search {
             editor
                 .registers
                 .write('/', persistence::read_search_history())
-                // TODO: do something about this unwrap
                 .unwrap();
         }
         if persistence_config.clipboard {
             editor
                 .registers
                 .write('"', persistence::read_clipboard_file())
-                // TODO: do something about this unwrap
                 .unwrap();
         }
 
@@ -228,25 +225,25 @@ impl Application {
                             Some(Layout::Horizontal) => Action::HorizontalSplit,
                             None => Action::Load,
                         };
-                        let doc_id = match editor.open(&file, action) {
+                        match editor.open(&file, action) {
                             // Ignore irregular files during application init.
                             Err(DocumentOpenError::IrregularFile) => {
                                 nr_of_files -= 1;
                                 continue;
                             }
                             Err(err) => return Err(anyhow::anyhow!(err)),
-                            Ok(doc_id) => doc_id,
+                            Ok(_) => (),
                         };
                         // with Action::Load all documents have the same view
                         // NOTE: this isn't necessarily true anymore. If
                         // `--vsplit` or `--hsplit` are used, the file which is
                         // opened last is focused on.
                         if let Some(pos) = pos {
-                            let view_id = editor.tree.focus;
-                            let doc = doc_mut!(editor, &doc_id);
+                            let (view, doc) = current!(editor);
                             let pos =
                                 Selection::point(pos_at_coords(doc.text().slice(..), pos, true));
-                            doc.set_selection(view_id, pos);
+                            doc.set_selection(view.id, pos);
+                            align_view(doc, view, Align::Center);
                         }
                     }
                 }
@@ -260,10 +257,6 @@ impl Application {
                         nr_of_files,
                         if nr_of_files == 1 { "" } else { "s" } // avoid "Loaded 1 files." grammo
                     ));
-                    // align the view to center after all files are loaded,
-                    // does not affect views without pos since it is at the top
-                    // let (view, doc) = current!(editor);
-                    // align_view(doc, view, Align::Center);
                 }
             } else {
                 editor.new_file(Action::VerticalSplit);

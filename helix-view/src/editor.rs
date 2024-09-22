@@ -1740,14 +1740,9 @@ impl Editor {
         let path = helix_stdx::path::canonicalize(path);
         let id = self.document_by_path(&path).map(|doc| doc.id);
 
-        // TODO: surely there's a neater way to do this?
-        let mut new_doc = false;
-
-        let id = if let Some(id) = id {
-            id
+        let (id, new_doc) = if let Some(id) = id {
+            (id, false)
         } else {
-            new_doc = true;
-
             let mut doc = Document::open(
                 &path,
                 None,
@@ -1767,11 +1762,13 @@ impl Editor {
             let id = self.new_document(doc);
             self.launch_language_servers(id);
 
-            id
+            (id, true)
         };
 
         self.switch(id, action);
 
+        // Restore file position
+        // This needs to happen after the call to switch, since switch messes with view offsets
         if new_doc
             && !self
                 .config()
@@ -1786,8 +1783,8 @@ impl Editor {
                 let (view, doc) = current!(self);
 
                 let doc_len = doc.text().len_chars();
-                // don't restore the view and selection if the selection goes beyond the file's end
-                if !selection.ranges().iter().any(|range| range.to() >= doc_len) {
+                // Don't restore the view and selection if the selection goes beyond the file's end
+                if !selection.ranges().iter().any(|range| range.to() > doc_len) {
                     doc.set_view_offset(view.id, view_position);
                     doc.set_selection(view.id, selection);
                 }
